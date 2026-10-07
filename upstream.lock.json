@@ -1,0 +1,10 @@
+{
+  "predictor": {
+    "url": "https://github.com/harveybc/predictor.git",
+    "commit": "25fcfe1c045dbd3449b8f65d695788bf049c8f90"
+  },
+  "causal-inference": {
+    "url": "https://github.com/harveybc/causal-inference.git",
+    "commit": "08f44741d52a911e3855223f90c76021d5aefd88"
+  }
+}

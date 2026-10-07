@@ -1,0 +1,125 @@
+{
+  "causal_supported": [],
+  "causal_supported_label": "CAUSAL_SUPPORTED",
+  "causal_supported_meaning": "phase-1 causal-rule support; candidates for validation, NOT a final selection",
+  "contract_source": "synthetic_demo_not_phase1_evidence",
+  "data": {
+    "bar_hours": 1,
+    "canonical_columns_sha256": "e4815999aaf7dfd03fefcdfe5269a8d02b0e4f2fbb6a820601ee444f190531ef",
+    "features_file": "features_train.parquet",
+    "features_sha256": "d5029f2c598db2e6535cbcde21297c9a0e19b51413f8a95e19f5e43c2e2168bf",
+    "folds_file": null,
+    "folds_sha256": null,
+    "row_id_column": "row_id",
+    "split": "TRAIN",
+    "targets_file": "targets_train.parquet",
+    "targets_sha256": "07b7b4052f3d9de297ff39d50927722b27196eee52d5e2305ffb074f64074296",
+    "timestamp_column": "timestamp",
+    "train_rows": 512
+  },
+  "expected_pairs": 10,
+  "feature_count": 5,
+  "features": [
+    {
+      "availability_time": "timestamp",
+      "clock": "OBSERVED",
+      "family": "sensor",
+      "feature_id": "duplicate",
+      "source": "synthetic:generated",
+      "source_bytes": 4096,
+      "support_h": 1,
+      "train_coverage": 1,
+      "transform": "identity",
+      "unit": "arbitrary"
+    },
+    {
+      "availability_time": "timestamp",
+      "clock": "OBSERVED",
+      "family": "sensor",
+      "feature_id": "noise",
+      "source": "synthetic:generated",
+      "source_bytes": 4096,
+      "support_h": 1,
+      "train_coverage": 1,
+      "transform": "identity",
+      "unit": "arbitrary"
+    },
+    {
+      "availability_time": "timestamp",
+      "clock": "OBSERVED",
+      "family": "sensor",
+      "feature_id": "sensor",
+      "source": "synthetic:generated",
+      "source_bytes": 4096,
+      "support_h": 1,
+      "train_coverage": 1,
+      "transform": "identity",
+      "unit": "arbitrary"
+    },
+    {
+      "availability_time": "timestamp",
+      "clock": "OBSERVED",
+      "family": "sensor",
+      "feature_id": "sparse",
+      "source": "synthetic:generated",
+      "source_bytes": 4096,
+      "support_h": 1,
+      "train_coverage": 0.015625,
+      "transform": "identity",
+      "unit": "arbitrary"
+    },
+    {
+      "availability_time": "timestamp",
+      "clock": "OBSERVED",
+      "family": "sensor",
+      "feature_id": "squared",
+      "source": "synthetic:generated",
+      "source_bytes": 4096,
+      "support_h": 1,
+      "train_coverage": 1,
+      "transform": "identity",
+      "unit": "arbitrary"
+    }
+  ],
+  "final_selection": false,
+  "fold_count": 2,
+  "folds": [
+    {
+      "fold_id": "prefix_half",
+      "train_rows": [
+        0,
+        256
+      ]
+    },
+    {
+      "fold_id": "prefix_three_quarters",
+      "train_rows": [
+        0,
+        384
+      ]
+    }
+  ],
+  "identity": "synthetic-demo:653dd7d2f8632af7baace7aeacffe945f936331ee7d5f33996bd3a4202cd568f",
+  "identity_source": {
+    "kind": "SYNTHETIC_DEMO",
+    "seed": 7
+  },
+  "manifest_sha256": "e92643d4d490d47feb397b1e6848588817468167e4053d587c70977025502d35",
+  "phase1": {
+    "scope": "SYNTHETIC_DEMO_ONLY",
+    "state": "NOT_RUN"
+  },
+  "population_id": "SYNTHETIC_SENSOR",
+  "population_sha256": "baa4ee4a1dac6f414300ddce21a34e9475f06029b56033d82be54f64afeb847a",
+  "schema": "fs_phase23.population_manifest.v1",
+  "target_count": 1,
+  "targets": [
+    {
+      "column": "load_next_hour",
+      "family": "synthetic_load",
+      "head": "regression",
+      "horizon_hours": 1,
+      "target_id": "load_next_hour"
+    }
+  ]
+}

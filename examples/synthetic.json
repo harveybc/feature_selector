@@ -1,0 +1,12 @@
+{
+  "schema": "dataset_selection.synthetic_demo.v1",
+  "population_id": "SYNTHETIC_SENSOR",
+  "seed": 7,
+  "rows": 512,
+  "n_shards": 2,
+  "pairwise_params": {
+    "lags_hours": [0, 1, 6, 24],
+    "min_support": 100,
+    "dcor_max_rows": 128
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "initiative": "public_feature_selection_reuse",
+  "current_stage": "S12_ALPHA_ACCEPTANCE",
+  "state": "PASSED",
+  "scope": "Documentation and bounded synthetic adapter over existing pinned engines",
+  "requirements": ["R1", "R2", "R3", "R4", "R5"],
+  "traceability": "docs/TRACEABILITY.md",
+  "next_allowed_actions": ["publish verified documentation and adapter"],
+  "history": [
+    {"stage": "S0_S8", "state": "DESIGNED", "evidence": "docs/TRACEABILITY.md and tests/test_selection_demo.py"},
+    {"stage": "S9_S12", "state": "PASSED", "evidence": "docs/VERIFICATION.md; four acceptance tests and independent CLI run"},
+    {"stage": "S13_BETA_ACCEPTANCE", "state": "DEFERRED", "reason": "No independent external-domain user trial yet"}
+  ],
+  "remaining_scope_limits": ["causal target-pack generalization", "universal plugin API", "complete download recipes for the historical financial campaign"]
+}
