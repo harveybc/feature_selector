@@ -31,8 +31,8 @@ small example. Installation needs Internet access; running the example does
 not use a feed, GPU, API key or remote warehouse.
 
 ```bash
-git clone https://github.com/harveybc/dataset_selection.git
-cd dataset_selection
+git clone https://github.com/harveybc/feature_selector.git
+cd feature_selector
 git init ../predictor-selection-runtime
 git -C ../predictor-selection-runtime remote add origin https://github.com/harveybc/predictor.git
 git -C ../predictor-selection-runtime fetch --depth 1 --filter=blob:none origin 25fcfe1c045dbd3449b8f65d695788bf049c8f90
@@ -42,7 +42,7 @@ python3.12 -m venv .venv
 source .venv/bin/activate
 cd ../predictor-selection-runtime
 python -m pip install -r tools/fs_phase23_deploy/requirements.lock
-cd ../dataset_selection
+cd ../feature_selector
 python scripts/selection_demo.py run \
   --predictor-root ../predictor-selection-runtime \
   --config examples/synthetic.json --output output/sensor

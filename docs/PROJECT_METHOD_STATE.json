@@ -10,7 +10,7 @@
     {"stage": "S0_S8", "state": "DESIGNED", "evidence": "docs/TRACEABILITY.md and tests/test_selection_demo.py"},
     {"stage": "S9_S12", "state": "PASSED", "evidence": "docs/VERIFICATION.md; four acceptance tests and independent CLI run"},
     {"stage": "S13_BETA_ACCEPTANCE", "state": "DEFERRED", "reason": "No independent external-domain user trial yet"},
-    {"stage": "S14_RELEASE_OPERATION", "state": "PUBLISHED", "evidence": "https://github.com/harveybc/dataset_selection/commit/e0a993b"}
+    {"stage": "S14_RELEASE_OPERATION", "state": "PUBLISHED", "evidence": "https://github.com/harveybc/feature_selector/commit/e0a993b"}
   ],
   "remaining_scope_limits": ["causal target-pack generalization", "universal plugin API", "complete download recipes for the historical financial campaign"]
 }
