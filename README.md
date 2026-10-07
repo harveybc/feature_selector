@@ -1,4 +1,4 @@
-# feature_selection
+# feature_selector
 
 Time-series feature selection with retained evidence: individual profiles,
 causal diagnostics, pairwise dependence, candidate rankings and predictive
