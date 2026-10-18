@@ -20,9 +20,15 @@ weights or large analytical databases are bundled here.
 | 3: candidate subsets | Clustering, mRMR, JMI, causal variants and controls across subset sizes | Nine built-in methods; candidate sets await predictive validation. |
 | 4: predictive selection | Raw/random/trained encoders and paired validation of candidate sets | Existing campaign in predictor, with trading-specific weekly evaluation. General domain validation remains an integration task. |
 
-The ongoing trading campaign has closed phases 1-3 for its declared populations.
-Phase 4 and its final selected-feature manifest are still in progress as of
-2026-10-07. Those results do not establish performance in another domain.
+The EURUSD trading population is on a data-integrity hold as of 2026-10-18.
+Missing source observations and missing prepared training months require real
+data recovery, a new admitted population and recomputation of its selection.
+Its earlier metrics, subsets and predictive results are not reusable evidence.
+This does not invalidate the synthetic example or independent ETH inputs.
+The recovery and admission procedure belongs to
+[financial-data](https://github.com/harveybc/financial-data), in
+`work_plan/17_CANONICAL_INVENTORY_AND_CURATION.md`; implementing and verifying
+that procedure is ongoing, not a completed quality certificate.
 
 ## Quickstart: local CPU example
 
@@ -110,8 +116,9 @@ point and the remaining packaging work.
 
 ## Our trading example
 
-EURUSD has 366 candidates, ETH 83, with separate targets and denominators.
-The frozen manifests and source identifiers are linked in
+Trading populations have separate targets and denominators. Do not restore an
+old EURUSD manifest or selection from an earlier release: its replacement must
+be generated from admitted, repaired inputs. Acquisition entry points are in
 [data sources and reproduction](docs/DATA_SOURCES.md). Data is acquired with
 your own provider access and stored outside Git. Re-downloading a revisable
 dataset can produce different bytes; reproducing an old number requires the

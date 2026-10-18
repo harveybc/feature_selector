@@ -5,18 +5,23 @@ It needs no downloaded data. Real research inputs belong in your own lake or
 local storage. This repository publishes the method and identities, not bulk
 market data or analytical snapshots.
 
-## Retained campaign contracts
+## Population status
 
-The exact candidate lists, transformations, source identifiers, target horizons,
-folds and TRAIN file hashes are in predictor at the pinned revision:
+The earlier EURUSD population is withdrawn after source and prepared-window
+coverage defects were confirmed. Do not use its manifest, metrics, subsets or
+frozen data hashes to restore an experiment. Recover actual observations,
+verify the new admitted population and recompute selection first. Never
+interpolate, forward-fill or synthesize prices to manufacture coverage.
 
-- [EURUSD manifest](https://github.com/harveybc/predictor/blob/25fcfe1c045dbd3449b8f65d695788bf049c8f90/fs_phase23/manifest/EURUSD_MANIFEST.json): 366 candidates, 14 targets, five TRAIN folds, 66,795 feature pairs.
+Independent ETH contracts remain separate; retaining them does not certify
+their data quality or availability:
+
 - [ETH manifest](https://github.com/harveybc/predictor/blob/25fcfe1c045dbd3449b8f65d695788bf049c8f90/fs_phase23/manifest/ETH_MANIFEST.json): 83 candidates, six targets, three TRAIN folds, 3,403 feature pairs.
 - [ETH development dataset contract](https://github.com/harveybc/predictor/blob/25fcfe1c045dbd3449b8f65d695788bf049c8f90/examples/data/project3/ethusdt_4h_tech_stat_full_model_ready.manifest.json): the original symbol is ETHUSDT, the contract asset label is ETHUSD, and the interval is 4h. These labels are retained, not silently treated as identical markets.
 - [Bundle builder](https://github.com/harveybc/predictor/blob/25fcfe1c045dbd3449b8f65d695788bf049c8f90/tools/phase1_deployment/prepare.py): converts retained campaign inputs into independent population bundles.
 
-EURUSD source IDs include FX prices, FRED observations, market indices, ETFs,
-commodities, CFTC data and clock-derived features. They are lake identifiers,
+Candidate source families include FX prices, FRED observations, market indices,
+ETFs, commodities, CFTC data and clock-derived features. Lake identifiers are
 not direct provider download URLs. The ETH phase-2 manifest labels its source
 `git-pinned-development` and its availability clock `DEVELOPMENT_UNCERTIFIED`.
 Do not infer certified point-in-time availability or a particular exchange
@@ -59,8 +64,9 @@ credentials or account identifiers in a public configuration.
 4. Materialize features and future targets with identical row identities. Keep
    labels unavailable until their full horizon is observed. Preserve the
    train/validation/test contract and source lineage.
-5. Compare output digests with the frozen manifest for exact replay. A mismatch
-   creates a new study identity; comparable data is not byte-identical replay.
+5. Admit only data with verified monthly coverage on the applicable calendar,
+   valid timestamps and sufficient prepared-window support. Hash the newly
+   admitted inputs under a new identity; do not reuse withdrawn EURUSD hashes.
 6. Run the profiles/causal study, then pairs and rankings, and finally the domain's
    predictive validation. Keep all metrics, dispositions and readback receipts.
 
