@@ -13,6 +13,29 @@
     {"stage": "S14_RELEASE_OPERATION", "state": "PUBLISHED", "evidence": "https://github.com/harveybc/feature_selector/commit/e0a993b"}
   ],
   "remaining_scope_limits": ["causal target-pack generalization", "universal plugin API", "complete download recipes for the historical financial campaign"],
+  "rebuild_adapter": {
+    "updated_on": "2026-10-18",
+    "current_stage": "S12_ALPHA_ACCEPTANCE",
+    "state": "SYNTHETIC_ENGINE_PASSAGE_VERIFIED",
+    "verification": "42 tests passed; independent CLI passage and restart verified",
+    "scope": "Existing PROFILE_ONLY phase1, pairwise phase2, phase3 filters and local publication",
+    "requirements": ["RB1", "RB2", "RB3", "RB4", "RB5"],
+    "traceability": "docs/TRACEABILITY.md",
+    "evidence_and_next_command": "docs/REBUILD_HANDOFF.md",
+    "data_admission_complete": false,
+    "source_admission_verified": false,
+    "feature_selection_complete": false,
+    "causal_evidence_computed": false,
+    "production_execution_tested": false,
+    "next_allowed_actions": ["review and integrate adapter", "supply externally verified admission handoff and reviewed CPU config", "render or resume declared profile/filter pipeline"],
+    "remaining_dependencies": ["authoritative source-admission verification outside this adapter", "real prepared-row and label-clock acceptance", "measured production resource admission", "remote publication and physical-copy integration", "causal and final predictive/policy validation when required by main"],
+    "history": [
+      {"stage": "S0_S8", "state": "DESIGNED", "evidence": "pinned API discovery and RB1-RB4 tests before code"},
+      {"stage": "S9_S12", "state": "PASSED_SYNTHETIC", "evidence": "actual engines, local readback, restart, publication-outage and corrupted-value tests"},
+      {"stage": "S8_S12", "state": "REVISED_FOR_REVIEW", "evidence": "RB5 future-label tests failed before fix; explicit hourly-elapsed global/fold boundary validation added"},
+      {"stage": "S13_S14", "state": "DEFERRED", "reason": "No production financial execution or source-admission certification"}
+    ]
+  },
   "curation_admission_probe": {
     "updated_on": "2026-10-18",
     "current_stage": "S12_ALPHA_ACCEPTANCE",

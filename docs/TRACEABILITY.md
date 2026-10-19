@@ -36,6 +36,31 @@ validates only the documented candidate envelope and population accounting, and
 prints a path-free diagnostic. It never opens listed datasets or imports the
 selector. Owner dependencies and execution commands: `docs/ADMISSION_PROBE.md`.
 
+## Rebuild Adapter (2026-10-18)
+
+User-authorized extension: execute a verified TRAIN handoff through pinned
+PROFILE_ONLY phase 1, then phases 2/3, with sequential local CPU dispatch and
+existing durable receipts/outboxes. It is not source admission or causal closure.
+Tests are defined before implementation in `tests/test_selection_rebuild.py`.
+
+| Requirement | Acceptance |
+|---|---|
+| RB1 | Owner schemas render from exact dynamic variables and pinned input/config/code identities; changed identities cannot resume |
+| RB2 | Hash, availability, unique aligned rows, monthly TRAIN coverage and variable membership fail before dispatch |
+| RB3 | Actual profiler, pairwise and nine filter engines publish into existing DuckDB tables and close automatically |
+| RB4 | Publication failure prevents successors; rerun retains science and retries publication; status is read-only |
+| RB5 | Hourly-elapsed finite targets cannot reach/cross global TRAIN or containing prefix-fold cutoffs; masks are materialized before hashing, not silently changed by execution |
+
+RB1: `test_render_uses_owner_schemas_and_dynamic_denominator`; RB2:
+`test_contract_refuses_bad_handoff_before_any_work`; RB3:
+`test_real_profile_pairwise_filter_passage_and_restart`; RB4: restart/status
+assertions in RB3 plus `test_publication_failure_stops_successor_and_resumes_without_refitting`.
+RB5: `test_future_labels_refused_before_render`,
+`test_declared_boundary_masks_are_preserved_not_rewritten`. RB3 also mutates
+retained metric values without changing digest labels and requires readback refusal.
+The source-admission attestation is an external trust boundary, not an authenticated
+owner receipt verifier. Executable contract and commands: `docs/REBUILD_HANDOFF.md`.
+
 Test design precedes adapter implementation. The output reports its synthetic
 scope, configuration and input identities, upstream revision, seed, pairwise
 and filter closures, local readback and `final_selection: false`.

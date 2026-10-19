@@ -1,0 +1,13 @@
+{
+  "schema": "feature_selector.rebuild_config.v1",
+  "phase1_mode": "PROFILE_ONLY",
+  "target_pack_id": "ETH",
+  "calendar": "24x7",
+  "max_file_bytes": 67108864,
+  "max_rows": 100000,
+  "max_features": 512,
+  "max_attempts": 2,
+  "worker_timeout_seconds": 120,
+  "n_shards": 2,
+  "pairwise_params": {"dcor_max_rows": 512}
+}

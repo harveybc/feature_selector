@@ -33,6 +33,11 @@ The bounded [candidate inventory probe](docs/ADMISSION_PROBE.md) checks the
 existing financial-data envelope and denominator without admitting data or
 launching selection. It exits blocked until the owner supplies its admission
 interface; it is not an automatic real-data campaign launcher.
+For actual execution, the [CPU rebuild adapter](docs/REBUILD_HANDOFF.md) now
+renders a declared TRAIN handoff into existing phase-1 PROFILE_ONLY configs and
+automatically runs profiles, pairwise metrics, filters and local publication.
+Its synthetic end-to-end fixture does not certify financial admission or final
+selection; the production handoff has an explicit external-admission trust boundary.
 
 ## Quickstart: local CPU example
 
