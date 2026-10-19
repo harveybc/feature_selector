@@ -27,3 +27,11 @@ sha256 `4fd6710e...`, status pending an independent decision). Results audit req
 `docs/timing_selection/eurusd_h1_v2/AUDIT_REQUEST_TIMING_SELECTION_FOR_MUSASHI.md` on the same branch.
 Selected inputs (proxy usefulness only): RAW_BAR_LOG_RETURN, cal.hod_sin, cal.session_europe,
 px.atr_ratio_14_120, px.close_loc_2, px.logret_24, variogram_hurst_w96.
+
+## Revision 3 results (2026-10-19, expert v2)
+
+Revision 2 is superseded by the ZigZag v2 expert (heuristic-strategy abbfaa6). Sealed object: predictor
+`docs/timing_selection/eurusd_h1_v3/SELECTION_MANIFEST.json` (`TIMING_PROXY_SELECTION`, manifest sha256
+`b4da1012...`, pending an independent decision), with its v3 results audit request in the same
+directory. Selected inputs (proxy usefulness only): RAW_BAR_LOG_RETURN, RAW_ELAPSED_HOURS, cal.hod_cos,
+px.atr_ratio_14_120, px.close_loc_2, variogram_hurst_w96.
