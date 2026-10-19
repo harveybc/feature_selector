@@ -16,10 +16,13 @@ describes the additional contracts required for a real dataset.
 | Extractibility | predictor FS4 campaign/worker plus feature-extractor artifacts | Versioned task plans, arms, folds and model settings | Another encoder requires compatible support/alignment and serialization tests |
 | Predictive validation | predictor weekly campaign/wrapper | Trading plans and retained input bundles | A nontrading/static/retraining protocol needs its own validated evaluator |
 | Analytical results | predictor `tools/fs_phase23_warehouse.py` | Local file or service URL; token environment name | New metric schemas/backend implementations need explicit migrations and readback parity |
+| Timing targets (ZigZag expert) | predictor `tools/timing_selection.py` (JSON config `examples/config/timing_selection/eurusd_h1_timing.json`), targets `tools/timing_pivot_targets.py`, causal-inference `fs_timing_pack.py` (pack id `EURUSD_TIMING`), evaluator heuristic-strategy `tools/short_horizon_timing_eval.py` | Expert parameters (Depth/Deviation/Backstep), k bars, splits/folds/purges, candidate sources (inventory generator, price pool, fractal store), pairwise/filter params, recipe (method, K, cluster prune), causal screens, comparison sets | Phases 2/3 run unchanged on the new target family; PCMCI+ needs tigramite installed (NOT_RUN recorded otherwise); an independent decision record is still required to pass `selected_manifest_gate` |
 
 The general predictor model plugin system does not automatically turn all these
 selection components into plugins. `preprocessor` also has legacy feature
 selector plugins; they do not implement this complete four-phase workflow.
+
+See [TIMING_SELECTION_MAP.md](TIMING_SELECTION_MAP.md) for the timing-target extension (2026-10-19) and `examples/timing_pivot_eurusd.json`.
 
 ## Input contract for a new population
 
