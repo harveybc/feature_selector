@@ -70,6 +70,25 @@ def snapshot(bundle, run_root, selected, destination):
     return verify_snapshot(destination)
 
 
+def deployment_receipt(selected, destination, mirror_host, mirror_root):
+    require(mirror_host and mirror_root, 'deployment receipt requires verified mirror destination')
+    receipt = read_json(selected/'RECEIPT.json')
+    receipt.update(selection_close_file='CLOSE.json', selection_close_sha256=sha(selected/'CLOSE.json'))
+    immutable(selected/'DEPLOYMENT_RECEIPT.json', receipt)
+    names = ['CLOSE.json', 'DEPLOYMENT_RECEIPT.json']
+    for name in names:
+        target = destination/'selected'/name
+        shutil.copyfile(selected/name, target)
+        with target.open('rb') as stream:
+            os.fsync(stream.fileno())
+    subprocess.run(['rsync','-a','--checksum','--fsync', *[str(destination/'selected'/n) for n in names],
+                    mirror_host+':'+mirror_root+'/selected/'], check=True, timeout=60)
+    command = shlex.join(['sha256sum']+[mirror_root+'/selected/'+n for n in names])
+    remote = subprocess.check_output(['ssh',mirror_host,command],text=True,timeout=30)
+    require([line.split()[0] for line in remote.splitlines()] == [sha(selected/n) for n in names],
+            'deployment metadata mirror differs')
+
+
 def main():
     p = argparse.ArgumentParser(__doc__)
     p.add_argument('action', choices=['complete','status','verify'])
@@ -99,6 +118,7 @@ def main():
                 'closed selection identity changed')
         require(verify_snapshot(a.snapshot)['selection_sha256'] == done['selection_sha256'],
                 'closed snapshot differs')
+        deployment_receipt(a.selected, a.snapshot, a.mirror_host, a.mirror_root)
         print(json.dumps(done, indent=2))
         return
     result = run(a.bundle/'REBUILD_INPUT.json', read_json(a.bundle/'REBUILD_CONFIG.json'),
@@ -125,6 +145,7 @@ def main():
         full_inventory_complete=False, causal_evidence_computed=False,
         publication_sha256=sha(a.selected/'PUBLICATION.json'))
     immutable(a.selected/'CLOSE.json', complete)
+    deployment_receipt(a.selected, a.snapshot, a.mirror_host, a.mirror_root)
     print(json.dumps(complete, indent=2))
 
 

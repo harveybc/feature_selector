@@ -65,7 +65,7 @@ causal support does not reject a feature. The full external-source selection
 and RL policy-value validation remain distinct unfinished work. TEST is not
 used by this experiment. Neither this result nor a test count certifies profit.
 
-Verification:53 selector tests pass, including changed-byte snapshots, live-WAL
+Verification:55 selector tests pass, including changed-byte snapshots, live-WAL
 refusal, malformed subsets, keyset readback pagination and stored-value tampering.
 financial-data preparation has six focused tests and real exact-prefix checks
 at512 and4096 observed rows. Full repository/literature reproduction is not
@@ -90,6 +90,22 @@ CUDA_VISIBLE_DEVICES='' .venv/bin/python scripts/complete_core_selection.py comp
 
 .venv/bin/python scripts/complete_core_selection.py status --selected "$SELECTED_BUNDLE"
 .venv/bin/python scripts/complete_core_selection.py verify --snapshot "$PHYSICAL_SNAPSHOT"
+```
+
+The completed operation emits `DEPLOYMENT_RECEIPT.json`, pinned to `CLOSE.json`;
+the RL consumer refuses an unpublished or unmirrored merely sealed selection.
+Two additional deployment metadata files are copied and checked separately
+from the39 scientific/input/database files in the frozen snapshot index.
+
+To query this selected subset without mixing earlier engineering seals, filter
+the native decision table by the exact active identity:
+
+```sql
+SELECT DISTINCT feature_id
+FROM df_fact_feature_selection_decision
+WHERE run_id = 'selected-core:553fc04707ee3d1d2d552a21af073bf942e3a1b880150f2b34245764446c09e2'
+  AND decision = 'SELECTED'
+ORDER BY feature_id;
 ```
 
 Use a private EnvironmentFile/service for credentials, never command arguments
