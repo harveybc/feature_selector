@@ -18,3 +18,12 @@ expert and harness, plugin conventions) is in predictor `docs/TIMING_SELECTION.m
 Example configuration: [`examples/timing_pivot_eurusd.json`](../examples/timing_pivot_eurusd.json)
 (placeholders for private paths; every input pinned by sha256). The lock pins are updated only after the
 owners merge and the real integration test passes (repository rule).
+
+## Revision 2 results (2026-10-19)
+
+Revision 2 incorporates the plan audit (REVISE_BEFORE_FINAL_SEAL). Sealed object: predictor
+`docs/timing_selection/eurusd_h1_v2/SELECTION_MANIFEST.json` (`TIMING_PROXY_SELECTION`, manifest
+sha256 `4fd6710e...`, status pending an independent decision). Results audit request:
+`docs/timing_selection/eurusd_h1_v2/AUDIT_REQUEST_TIMING_SELECTION_FOR_MUSASHI.md` on the same branch.
+Selected inputs (proxy usefulness only): RAW_BAR_LOG_RETURN, cal.hod_sin, cal.session_europe,
+px.atr_ratio_14_120, px.close_loc_2, px.logret_24, variogram_hurst_w96.
