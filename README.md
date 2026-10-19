@@ -29,6 +29,10 @@ The recovery and admission procedure belongs to
 [financial-data](https://github.com/harveybc/financial-data), in
 `work_plan/17_CANONICAL_INVENTORY_AND_CURATION.md`; implementing and verifying
 that procedure is ongoing, not a completed quality certificate.
+The bounded [candidate inventory probe](docs/ADMISSION_PROBE.md) checks the
+existing financial-data envelope and denominator without admitting data or
+launching selection. It exits blocked until the owner supplies its admission
+interface; it is not an automatic real-data campaign launcher.
 
 ## Quickstart: local CPU example
 

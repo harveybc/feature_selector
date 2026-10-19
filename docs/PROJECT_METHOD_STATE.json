@@ -12,5 +12,26 @@
     {"stage": "S13_BETA_ACCEPTANCE", "state": "DEFERRED", "reason": "No independent external-domain user trial yet"},
     {"stage": "S14_RELEASE_OPERATION", "state": "PUBLISHED", "evidence": "https://github.com/harveybc/feature_selector/commit/e0a993b"}
   ],
-  "remaining_scope_limits": ["causal target-pack generalization", "universal plugin API", "complete download recipes for the historical financial campaign"]
+  "remaining_scope_limits": ["causal target-pack generalization", "universal plugin API", "complete download recipes for the historical financial campaign"],
+  "curation_admission_probe": {
+    "updated_on": "2026-10-18",
+    "current_stage": "S12_ALPHA_ACCEPTANCE",
+    "state": "PROBE_VERIFIED_ADMISSION_BLOCKED",
+    "requirements": ["AP1", "AP2", "AP3"],
+    "traceability": "docs/TRACEABILITY.md",
+    "evidence_and_next_command": "docs/ADMISSION_PROBE.md",
+    "tests": "23 focused CPU checks passed; full engine integration not rerun",
+    "data_admission_complete": false,
+    "feature_selection_complete": false,
+    "scientific_training_authorized": false,
+    "missing_owner_object": "financial-data versioned admitted-variable interface with canonical hashes and per-variable quality evidence",
+    "next_allowed_actions": ["probe explicit candidate inventory once", "bind the actual admission interface after its owner implements and verifies it"],
+    "blocked_actions": ["invent admitted schema", "launch from candidate probe", "reuse affected selections", "publish probe as selection metrics"],
+    "history": [
+      {"stage": "S0_S8", "state": "DESIGNED", "evidence": "owner contract discovery, AP1-AP3 and tests/test_inventory_probe.py before implementation"},
+      {"stage": "S9_S12", "state": "PASSED_SCOPED_PROBE_ONLY", "evidence": "focused tests and one-shot actual candidate return in docs/ADMISSION_PROBE.md"},
+      {"stage": "S13_BETA_ACCEPTANCE", "state": "DEFERRED", "reason": "No admitted interface or real admitted population available"},
+      {"stage": "S14_RELEASE_OPERATION", "state": "NOT_STARTED", "reason": "No deployment or automatic successor authorized by the probe"}
+    ]
+  }
 }
