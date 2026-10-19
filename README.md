@@ -13,6 +13,12 @@ weights or large analytical databases are bundled here.
 
 ## What is available
 
+New bounded real-data example: [admitted EURUSD core selection](docs/ADMITTED_CORE_SELECTION.md).
+It actually profiles30 causal price/technical candidates, computes435 pairs,
+runs nine filters and exports15 selected inputs with native warehouse readback
+and two verified physical copies. This is **not** admission/selection of the
+entire external catalogue, causal-effect identification or a proven trading winner.
+
 | Phase | Purpose | Implementation and reuse status |
 |---|---|---|
 | 1: individual evidence | Missing observations, outliers, stationarity, temporal/spectral profiles and target-specific causal evidence | Generic numeric profiler; causal worker currently supports the EURUSD and ETH target packs. A new causal domain needs an explicit adapter. |
@@ -20,10 +26,12 @@ weights or large analytical databases are bundled here.
 | 3: candidate subsets | Clustering, mRMR, JMI, causal variants and controls across subset sizes | Nine built-in methods; candidate sets await predictive validation. |
 | 4: predictive selection | Raw/random/trained encoders and paired validation of candidate sets | Existing campaign in predictor, with trading-specific weekly evaluation. General domain validation remains an integration task. |
 
-The EURUSD trading population is on a data-integrity hold as of 2026-10-18.
+The former broad EURUSD trading population entered a data-integrity hold on2026-10-18.
 Missing source observations and missing prepared training months require real
 data recovery, a new admitted population and recomputation of its selection.
 Its earlier metrics, subsets and predictive results are not reusable evidence.
+The new admitted-core selection above is closed; this does not lift the hold
+on unadmitted external sources or reuse their earlier results.
 This does not invalidate the synthetic example or independent ETH inputs.
 The recovery and admission procedure belongs to
 [financial-data](https://github.com/harveybc/financial-data), in
