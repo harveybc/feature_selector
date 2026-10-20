@@ -35,3 +35,11 @@ Revision 2 is superseded by the ZigZag v2 expert (heuristic-strategy abbfaa6). S
 `b4da1012...`, pending an independent decision), with its v3 results audit request in the same
 directory. Selected inputs (proxy usefulness only): RAW_BAR_LOG_RETURN, RAW_ELAPSED_HOURS, cal.hod_cos,
 px.atr_ratio_14_120, px.close_loc_2, variogram_hurst_w96.
+
+## Revision 4 (admitted source)
+
+v3 is retrospective lake-proxy research only (Musashi, REVISE_BEFORE_BUSINESS_USE). v4 runs on the
+admitted EURUSD source with one shared business-eligibility mask. Sealed object: predictor
+`docs/timing_selection/eurusd_h1_v4/` (manifest `ca5d75c2…`, pending an independent decision; result in
+`RESULT.md`). Selected inputs (proxy usefulness only): RAW_BAR_LOG_RETURN, cal.utc_session_us,
+hurst_spectrum_width_w200, px.close_loc_2. Example config: `examples/timing_pivot_eurusd_admitted.json`.
