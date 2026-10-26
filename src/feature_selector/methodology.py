@@ -96,11 +96,13 @@ class CausalSelection:
         store.immutable('SEARCH.json',search)
         confirmation = stage('confirmation')
         complete = search['termination'] != 'BUDGET'
-        release = (context['scope']=='development' and complete and search['selected'] is not None
+        cost_aware = not hasattr(evaluator,'can_release') or evaluator.can_release(ep)
+        release = (context['scope']=='development' and cost_aware and complete and search['selected'] is not None
                    and confirmation['accepted'])
         checked_files(context.get('files',[]),base)
         return dict(schema='feature_selector.result.v1', run_id=run_id, scope=context['scope'],
                     selected=search['selected'], search=search, stages=evidence,
                     search_complete=complete, final_selection=release,
+                    selection_use='cost_aware' if cost_aware else 'diagnostic',
                     financial_result=context['scope']=='development',
                     note='Model-specific development selection, not a global optimum or TEST performance.')

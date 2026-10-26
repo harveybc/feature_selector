@@ -1,4 +1,5 @@
 """Bridge that requires real RL training receipts rather than proxy scores."""
+import math
 from .contracts import require, sha, finite
 from .io import digest
 from .stages import execute, checked_files
@@ -14,7 +15,8 @@ class RLModelEvaluator:
     plugin_params = dict(command=[], source_pins=[], timeout_seconds=3600,
                          model_id='', model_sha256='', engine_sha256='',
                          training_budget={}, score_metric='sharpe',
-                         minimum_orders_per_week=2.0, max_gap=None)
+                         minimum_orders_per_week=2.0, max_gap=None,
+                         cost_mode='configured', cost_profile={}, selection_use='cost_aware')
 
     def validate(self, params):
         require(params['model_id'] and sha(params['model_sha256']) and sha(params['engine_sha256']), 'REAL_MODEL_ID_REQUIRED')
@@ -22,6 +24,25 @@ class RLModelEvaluator:
         require(params['score_metric'] in ('sharpe','profit'), 'SCORE_METRIC')
         require(finite(params['minimum_orders_per_week']) and params['minimum_orders_per_week'] >= 2, 'ACTIVITY_REQUIREMENT')
         require(params['max_gap'] is None or finite(params['max_gap']) and params['max_gap'] >= 0, 'GAP_LIMIT')
+        require(params['cost_mode'] in ('configured','zero_cost'), 'COST_MODE')
+        require(params['selection_use'] in ('cost_aware','diagnostic'), 'SELECTION_USE')
+        profile = params['cost_profile']
+        # Canonical cost components carry their units/settings plus numerical charge rates.
+        require(isinstance(profile,dict) and set(profile)=={'spread','slippage','commission','financing'}, 'COST_PROFILE')
+        rates=[]
+        for name, component in profile.items():
+            require(isinstance(component,dict) and set(component)=={'rates','settings'}
+                    and isinstance(component['rates'],list) and component['rates']
+                    and isinstance(component['settings'],dict) and component['settings'], 'COST_PROFILE_COMPONENT')
+            require(all(finite(x) and (name=='financing' or x>=0) for x in component['rates']), 'COST_PROFILE_RATE')
+            rates.extend(component['rates'])
+        if params['cost_mode']=='zero_cost':
+            require(params['selection_use']=='diagnostic','ZERO_COST_DIAGNOSTIC_ONLY')
+        if params['selection_use']=='cost_aware':
+            require(any(x!=0 for x in rates), 'NONZERO_COST_PROFILE')
+
+    def can_release(self, params):
+        return params['cost_mode']=='configured' and params['selection_use']=='cost_aware'
 
     def evaluate(self, request, context, params, work, base):
         self.validate(params)
@@ -30,8 +51,11 @@ class RLModelEvaluator:
         return self.verify(result, request, params, base)
 
     def verify(self, result, request, params, base):
+        self.validate(params)
         require(result.get('schema') == 'feature_selector.rl_result.v1', 'RL_RECEIPT_SCHEMA')
         require(result.get('request_sha256') == digest(request), 'RL_REQUEST_MISMATCH')
+        require(result.get('cost_mode')==params['cost_mode'], 'RL_COST_MODE')
+        require(result.get('cost_profile_sha256')==digest(params['cost_profile']), 'RL_COST_PROFILE')
         for key in ('features','groups','seed','support_hash','scaler_hash','splits'):
             require(result.get(key) == request[key], 'RL_RECEIPT_MISMATCH:' + key)
         for key in ('model_id','model_sha256','engine_sha256','training_budget'):
@@ -43,7 +67,15 @@ class RLModelEvaluator:
         checked_files(result['artifacts'], base)
         metrics = result['metrics']
         require(set(metrics) == {'train','selection'}, 'RL_METRIC_SPLITS')
-        for split in metrics.values():
+        components=result.get('cost_components',{})
+        require(set(components)=={'train','selection'}, 'RL_COST_COMPONENT_SPLITS')
+        for split_name,split in metrics.items():
+            costs=components[split_name]
+            require(isinstance(costs,dict) and set(costs)=={'spread','slippage','commission','financing'}
+                    and all(finite(v) and (k=='financing' or v>=0) for k,v in costs.items()), 'RL_COST_COMPONENTS')
+            require(finite(split.get('costs')) and math.isclose(sum(costs.values()),split['costs'],rel_tol=1e-9,abs_tol=1e-8), 'RL_COST_RECONCILIATION')
+            if params['cost_mode']=='zero_cost':
+                require(all(v==0 for v in costs.values()), 'RL_ZERO_COST_NONZERO_CHARGE')
             require(all(k in split for k in TRADING_METRICS), 'RL_METRICS_MISSING')
             for k in TRADING_METRICS:
                 require(finite(split[k]) or (k in ('sharpe','win_rate','buy_win_rate','sell_win_rate') and split[k] is None), 'RL_METRIC_NONFINITE:' + k)

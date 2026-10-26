@@ -77,3 +77,18 @@ The real PPO adapter, corrected simulator and admitted receipts must be supplied
 and verified before a new RL campaign. Do not claim these are repaired by
 packaging. Existing upstream.lock.json describes the legacy example only, not
 admission of its historical EURUSD artifacts.
+
+## Cost-mode extension (P11)
+
+The real evaluator must bind cost mode and the complete cost-profile digest in
+every request/result and cached identity. `zero_cost` is diagnostic only: it
+can search subsets but cannot emit a final cost-aware selection. A configured
+mode with zero numeric costs is also rejected for final selection. Native
+receipts include per-split spread, slippage, commission and financing totals;
+their signed sum must reconcile to costs (financing may be a credit).
+
+Tests: wrong/missing cost identity rejected; zero-cost residual charges rejected;
+component totals reconciled; no zero-cost final release; unchanged synthetic
+demo and all existing plugin contracts pass. A diagnostic result is not proof
+that a subset works with costs. The actual policy must be retrained/confirmed
+under configured costs, not merely have costs subtracted from its old profit.

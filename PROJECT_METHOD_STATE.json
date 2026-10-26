@@ -1,14 +1,15 @@
 {
   "schema": "feature_selector.method_state.v1",
-  "date": "2026-10-25",
-  "current_stage": "S14_PACKAGE_PUBLISHED_NATIVE_RL_INTEGRATION_PENDING",
+  "date": "2026-10-26",
+  "current_stage": "S15_COST_MODE_VERIFIED_NATIVE_RL_INTEGRATION_PENDING",
+  "cost_extension": {"design": "docs/PLUGIN_DESIGN.md", "requirement": "P11", "tests_passed": 38, "legacy_skipped": 4, "zero_cost_use": "diagnostic_only", "native_financial_fit": false},
   "publication": {"repository": "harveybc/feature_selector", "branch": "main", "code_commit": "2fea401ed52b38fc4bcba20089d15b4386e375ce", "remote_identity_verified": true},
   "design": "docs/PLUGIN_DESIGN.md",
   "requirements": ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10"],
   "scope": "plugin package and full methodology orchestration, not a financial selection result",
   "financial_training_started": false,
   "verification": {"tests_passed": 34, "legacy_tests_skipped": 4, "clean_install": true, "external_plugin_cli": true, "demo_subset_evaluations": 18, "replay_bytes_and_mtimes_equal": true, "report": "docs/PLUGIN_VERIFICATION.md"},
-  "next_actions": ["native corrected PPO evaluator integration and upstream evidence adapters", "actual-model scientific search remains separate"],
+  "next_actions": ["native corrected PPO evaluator integration and upstream evidence adapters", "paired configured/zero-cost diagnostic before costly subset search; fresh policies and crossed evaluation", "actual-model scientific search remains separate"],
   "history": [
     {"stage": "S0_S8", "result": "existing engines, source ownership, interfaces, requirements and tests designed"},
     {"stage": "S9", "result": "tests failed before package implementation; search budget exception corrected"},

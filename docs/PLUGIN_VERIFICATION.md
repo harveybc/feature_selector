@@ -70,3 +70,16 @@ Next scientific work: correct the native simulator findings; implement/verify
 the actual PPO subset-to-recipe bridge against this request/receipt protocol;
 adapt retained upstream stage evidence with exact identities; then run the
 bounded model-specific search. The complete methodology remains mandatory.
+
+## Cost-mode extension, 2026-10-26
+
+Version 0.2.1: 38 tests passed and four historical cross-repository tests skipped
+in the existing clean-install environment. Four additional tests cover costs
+identity/totals, signed financing versus zero-cost charges, rejection of a zero
+profile as cost-aware, and the methodology diagnostic release guard. Earlier
+34-test clean-install/replay evidence above belongs to version 0.2.0.
+No native financial subset search or RL selection result has been produced.
+The 0.2.1 installed CLI example also completed 18 subset evaluations and resumed
+with all 19 retained result files byte- and mtime-identical. Result SHA256:
+`d5ddd868ec673b7ce11e75aebf34314ac3c5fc53c51cfd64a8699f6f367575fd`.
+This remains synthetic scope with `final_selection=false`.

@@ -77,12 +77,16 @@ def receipt(tmp_path):
         seed=7,support_hash='a'*64,scaler_hash='b'*64,splits={'train':['2020','2023'],'selection':['2023','2024']},
         constraints=dict(agent_state='none',scaling='fixed_train',clipping=False,fit_scope='train_only',test_access=False))
     params={**RLModelEvaluator.plugin_params, 'model_id':'real-policy-contract',
-            'model_sha256':'c'*64,'engine_sha256':'d'*64,'training_budget':{'steps':100}}
+            'model_sha256':'c'*64,'engine_sha256':'d'*64,'training_budget':{'steps':100},
+            'cost_profile':{k:dict(rates=[v],settings={'unit':'test-only-rate'}) for k,v in
+                            [('spread',.1),('slippage',.1),('commission',.1),('financing',-.1)]}}
     metrics={k:0. for k in TRADING_METRICS}
     metrics.update(orders=100,buy_orders=50,sell_orders=50,early_closes=2,orders_per_week=3,win_rate=.5,
                    buy_win_rate=.5,sell_win_rate=.5,sharpe=.2,max_drawdown=.1)
     result=dict(schema='feature_selector.rl_result.v1',request_sha256=digest(request),**request,
         **{k:params[k] for k in ('model_id','model_sha256','engine_sha256','training_budget')},
+        cost_mode=params['cost_mode'], cost_profile_sha256=digest(params['cost_profile']),
+        cost_components={s:dict(spread=0.,slippage=0.,commission=0.,financing=0.) for s in ('train','selection')},
         fresh_training=True,test_access=False,observation_contract=request['constraints'],parameter_count=200,
         artifacts=[dict(path=str(f),sha256=file_hash(f))],metrics={'train':metrics,'selection':dict(metrics)})
     return request,params,result
@@ -105,6 +109,47 @@ def test_rl_metrics_activity_and_artifacts(tmp_path):
     assert not evaluator.verify(result,req,params,tmp_path)['eligible']
     result['metrics']['selection']['buy_orders']=12
     with pytest.raises(ValueError,match='DIRECTION_COUNT'):evaluator.verify(result,req,params,tmp_path)
+
+
+def test_cost_identity_and_reconciliation(tmp_path):
+    req,params,result=receipt(tmp_path)
+    result['cost_profile_sha256']='0'*64
+    with pytest.raises(ValueError,match='COST_PROFILE'): RLModelEvaluator().verify(result,req,params,tmp_path)
+    result['cost_profile_sha256']=digest(params['cost_profile'])
+    result['cost_components']['selection']['commission']=1.
+    with pytest.raises(ValueError,match='COST_RECONCILIATION'): RLModelEvaluator().verify(result,req,params,tmp_path)
+
+
+def test_easy_mode_is_diagnostic_with_no_hidden_costs(tmp_path):
+    req,params,result=receipt(tmp_path)
+    params.update(cost_mode='zero_cost',selection_use='diagnostic')
+    result['cost_mode']='zero_cost'
+    e=RLModelEvaluator();e.validate(params)
+    assert e.verify(result,req,params,tmp_path)['eligible']
+    assert not e.can_release(params)
+    result['cost_components']['selection'].update(commission=1.,financing=-1.)
+    with pytest.raises(ValueError,match='ZERO_COST'): e.verify(result,req,params,tmp_path)
+    params['selection_use']='cost_aware'
+    with pytest.raises(ValueError,match='ZERO_COST_DIAGNOSTIC_ONLY'): e.validate(params)
+
+
+def test_zero_profile_cannot_be_promoted_as_configured(tmp_path):
+    _,params,_=receipt(tmp_path)
+    for component in params['cost_profile'].values(): component['rates']=[0.]
+    with pytest.raises(ValueError,match='NONZERO_COST_PROFILE'): RLModelEvaluator().validate(params)
+
+
+def test_diagnostic_release_guard_in_methodology(tmp_path):
+    from feature_selector.methodology import CausalSelection
+    c,p,_,b=prepare(ROOT/'examples/plugin_demo.json')
+    # Synthetic plugin exercised through real orchestration, never a financial fit.
+    p['evaluator'].can_release=lambda params: False
+    d=p['dataset'].load(c['dataset']['params'],b)
+    store=RunStore(tmp_path)
+    with store.lock():
+        r=CausalSelection().run(c,p,store,d,b,'cost-diagnostic-test')
+    assert r['selection_use']=='diagnostic'
+    assert not r['final_selection']
 
 
 def test_undefined_sharpe_is_retained_not_converted_to_zero(tmp_path):

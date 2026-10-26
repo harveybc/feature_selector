@@ -206,3 +206,11 @@ they are not signatures against a writer replacing a directory coherently.
 Use governed environment credentials in external runners, never secrets in JSON.
 
 MIT for this package; external engines and data retain their own licenses.
+
+## Cost-aware and easy-mode evaluation
+
+The `rl_model` evaluator supports a paired `zero_cost` diagnostic in addition to
+`configured` costs. Both require a complete cost-profile identity and native
+per-component totals. Zero-cost searches cannot publish a final cost-aware
+selection. See [the RL evaluator contract](docs/PLUGIN_API.md#real-rl-evaluator).
+No financial selection has been completed by the packaged CPU example.
