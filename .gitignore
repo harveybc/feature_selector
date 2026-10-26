@@ -5,3 +5,6 @@ output/
 *.duckdb
 *.duckdb.wal
 *.parquet
+*.egg-info/
+build/
+dist/

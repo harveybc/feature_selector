@@ -6,6 +6,9 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.skipif(not os.environ.get('SELECTION_PREDICTOR_ROOT'),
+    reason='Legacy cross-repo acceptance requires SELECTION_PREDICTOR_ROOT at upstream.lock.json pin')
+
 ROOT = Path(__file__).resolve().parents[1]
 
 

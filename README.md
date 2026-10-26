@@ -1,169 +1,208 @@
 # feature_selector
 
-Time-series feature selection with retained evidence: individual profiles,
-causal diagnostics, pairwise dependence, candidate rankings and predictive
-validation. Start with the small CPU example, then adapt the input contracts
-to your data and evaluation schedule.
+Time-series feature selection with **external plugins**, JSON configuration,
+retained evidence and model-specific evaluation. Simple methods and our complete
+causal/profile/encoding/extractor workflow share one interface.
 
-This repository is the public entry point to the existing selection engines.
-It contains instructions, JSON examples and an executable adapter, while the
-scientific implementations remain in their owning repositories. Versions are
-pinned in [upstream.lock.json](upstream.lock.json); no market datasets, trained
-weights or large analytical databases are bundled here.
+Canonical repository: [harveybc/feature_selector](https://github.com/harveybc/feature_selector).
+`dataset_selection` was an old local checkout name, not another scientific engine.
 
-## What is available
+## Available now
 
-| Phase | Purpose | Implementation and reuse status |
-|---|---|---|
-| 1: individual evidence | Missing observations, outliers, stationarity, temporal/spectral profiles and target-specific causal evidence | Generic numeric profiler; causal worker currently supports the EURUSD and ETH target packs. A new causal domain needs an explicit adapter. |
-| 2: relationships | Aliases, linear/nonlinear dependence, lagged relationships and redundancy clusters | Manifest-configured numeric time series; executable in the local example below. |
-| 3: candidate subsets | Clustering, mRMR, JMI, causal variants and controls across subset sizes | Nine built-in methods; candidate sets await predictive validation. |
-| 4: predictive selection | Raw/random/trained encoders and paired validation of candidate sets | Existing campaign in predictor, with trading-specific weekly evaluation. General domain validation remains an integration task. |
+- Installed entry-point plugins for pipelines, methodologies, selectors,
+  evaluators, datasets and stages, including independently maintained packages.
+- Predictor-style config precedence and saved effective configuration/code identities.
+- Sequential backward **floating** selection: deletion, conditional reinclusion,
+  best subsets per size, deterministic tie handling and a finite evaluation budget.
+- Full `causal_selection` orchestration, retaining every scientific stage.
+  Existing algorithms stay in their owning repos, connected by artifact/command
+  adapters rather than duplicated or replaced.
+- `rl_model`: a real-training request/receipt bridge to the actual RL model.
+  It does not substitute a classifier or MLP for the configured policy.
+- Sequential execution, exclusive lock, atomic retained results, bounded attempts,
+  identity-bound resume, explicit failure and partial-search status.
 
-The EURUSD trading population is on a data-integrity hold as of 2026-10-18.
-Missing source observations and missing prepared training months require real
-data recovery, a new admitted population and recomputation of its selection.
-Its earlier metrics, subsets and predictive results are not reusable evidence.
-This does not invalidate the synthetic example or independent ETH inputs.
-The recovery and admission procedure belongs to
-[financial-data](https://github.com/harveybc/financial-data), in
-`work_plan/17_CANONICAL_INVENTORY_AND_CURATION.md`; implementing and verifying
-that procedure is ongoing, not a completed quality certificate.
+**Release scope:** package, contracts and runnable example. This does not close
+the separate financial simulator audit or certify a newly selected market list.
+The real-model runner must implement the [RL contract](docs/PLUGIN_API.md#real-rl-evaluator)
+on the corrected simulator. No financial RL training is started by installation.
 
-## Quickstart: local CPU example
+## Installation and first run
 
-Requirements: Linux, Git, Python 3.12 and about 1 GiB of available RAM for this
-small example. Installation needs Internet access; running the example does
-not use a feed, GPU, API key or remote warehouse.
+Python 3.10+ on Linux; verified on Python 3.12. The small example requires no GPU,
+credentials, market data, database or remote service.
 
 ```bash
 git clone https://github.com/harveybc/feature_selector.git
 cd feature_selector
-git init ../predictor-selection-runtime
-git -C ../predictor-selection-runtime remote add origin https://github.com/harveybc/predictor.git
-git -C ../predictor-selection-runtime fetch --depth 1 --filter=blob:none origin 25fcfe1c045dbd3449b8f65d695788bf049c8f90
-git -C ../predictor-selection-runtime sparse-checkout set tools olap fs_phase23
-git -C ../predictor-selection-runtime checkout --detach FETCH_HEAD
-python3.12 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-cd ../predictor-selection-runtime
-python -m pip install -r tools/fs_phase23_deploy/requirements.lock
-cd ../feature_selector
-python scripts/selection_demo.py run \
-  --predictor-root ../predictor-selection-runtime \
-  --config examples/synthetic.json --output output/sensor
+python -m pip install -e '.[test]'
+
+feature-selector --action plugins
+feature-selector --action plan --load_config examples/plugin_demo.json
+feature-selector --load_config examples/plugin_demo.json --output output/demo
+feature-selector --action status --output output/demo
+# Identical command resumes without repeating accepted evaluations.
+feature-selector --load_config examples/plugin_demo.json --output output/demo
+python -m pytest -q
 ```
 
-The fixed-seed sensor example generates five features and one future target,
-computes all ten feature pairs, builds nine methods' candidate subsets and
-verifies the saved metrics by reading them back from `output/sensor/metrics.duckdb`.
-It includes a duplicate, a nonlinear transform, noise and insufficient support.
-Its causal-supported set is empty: no phase-1 causal result is fabricated for
-the demo. Success prints `DEMO_FILTERS_COMPLETE`, with `final_selection: false`.
-
-Run the same command to resume. Accepted pairwise terminals are reused. Changed
-configuration requires a new output directory; changed input bytes are rejected.
-Inspect progress at any time:
-
-```bash
-python scripts/selection_demo.py status \
-  --predictor-root ../predictor-selection-runtime --output output/sensor
-```
-
-The JSON status includes work counts and the engine's measured ETA when enough
-tasks have completed. Short examples may finish before an ETA is useful.
+Equivalent: `python -m feature_selector --load_config ...`.
+The demo generates five inputs and actually fits a small regularized linear model
+on synthetic TRAIN, evaluating synthetic chronological validation. It demonstrates
+selection and installation, **not financial RL, causal discovery or TCN selection**.
+Its solver is deterministic, so one demo seed suffices. `final_selection` is
+always `false`; a synthetic run cannot release a market recipe.
 
 | Output | Meaning |
 |---|---|
-| `MANIFEST.json`, `PREPARED.json` | Feature/target definitions, seed, configuration and input hashes |
-| `campaign/terminals/` | Retained pairwise results, including unavailable metrics |
-| `campaign/PHASE2_MATRICES.npz` | Matrices used by the filter methods |
-| `campaign/PHASE_2_COMPLETE.json` | Complete pairwise population plus local warehouse readback |
-| `campaign/CANDIDATES_FOR_VALIDATION.json` | Candidate subsets, with no predictive winner |
-| `campaign/PHASE_3_FILTER_COMPLETE.json` | Ranking coverage and local warehouse readback |
-| `metrics.duckdb`, `REPORT.json`, `STATUS.json` | Local analytical file, scoped result and status generated on request |
+| `effective_config.json` | Fully merged JSON |
+| `RUN.json` | Dataset identity and installed plugin/code witnesses |
+| `stages/` | Evidence for all methodology stages |
+| `evaluations/` | Subset/seed results with hashes |
+| `attempts/` | Requests, responses, logs and preserved failures |
+| `SEARCH.json` | All evaluated subsets, deletion/reinclusion trace, best per size |
+| `RESULT.json` | Methodology result and confirmation outcome |
+| `STATUS.json` | Current unit, completion or failure |
 
-Verification: four acceptance tests passed using the pinned engines and numeric
-stack in an existing Python 3.12 environment. A fresh dependency installation
-was not measured in this audit. See [verification](docs/VERIFICATION.md).
+`COMPLETE` means the driver finished, not profitability or scientific acceptance.
+`search_complete=false` means the search exhausted its budget. Data, checkpoints,
+logs and credentials are not committed.
 
-```bash
-SELECTION_PREDICTOR_ROOT=../predictor-selection-runtime python -m pytest -q tests
+## Copy/paste instructions for an AI agent
+
+```text
+Work in harveybc/feature_selector. Read AGENTS.md, README.md and docs/PLUGIN_API.md.
+Create a Python virtual environment and install -e '.[test]'. List the plugins.
+Plan examples/plugin_demo.json, then run it on CPU in a NEW output directory.
+Do not use market data, GPU, TEST, credentials or production services for this check.
+
+Read STATUS.json, SEARCH.json and RESULT.json. Report selected features, subset
+count, termination reason and final_selection=false. Repeat the identical command;
+verify evaluation files and RESULT.json remain byte-identical and no fits repeat.
+Run pytest. Legacy tests need SELECTION_PREDICTOR_ROOT at upstream.lock.json's pin;
+report their skips separately from package tests.
+
+Install examples/external_plugin in this environment. Verify external_fixed is
+discoverable and run a new synthetic experiment using it. Do not claim synthetic
+acceptance establishes trading performance or a completed causal study.
+
+For real RL, follow docs/PLUGIN_API.md and docs/INTEGRATION_MAP.md. Bind admitted
+files, all scientific-stage evidence, real architecture/engine/training-budget
+identities and an external runner implementing the request/receipt contract.
+Never replace that runner with the synthetic model. Preserve fixed TRAIN scaling,
+no account-feedback inputs, no arbitrary clipping and TEST closed. Use bounded
+sequential execution and retain negative results, failed attempts and limitations.
 ```
 
-## Use your own data
+## Configuration
 
-Follow [the portability guide](docs/PORTABILITY.md) for the exact interfaces and
-limits. Export your lake's admitted TRAIN data to two aligned Parquet files:
-features and targets, with identical ordered row IDs and UTC decision times.
-Record when each input was actually available, its units, transformations,
-missingness and source identity. Define the target, its horizon and the intended
-retraining schedule before ranking features.
+Precedence: **plugin defaults < application defaults < JSON < explicit CLI**.
+Parameters are namespaced by role; two plugins can have a `window` without
+colliding. Unknown parameters/CLI options and ambiguous plugin names are errors.
 
-The phase-2/3 manifest supports other population names and feature columns;
-hour-based lags and prefix TRAIN folds are assumptions of the current engine.
-The example generator is synthetic-only. For real data, use the existing
-manifest builder and the CLI sequence in the portability guide. Phase-1
-provenance must come from your actual profiles and causal study.
+```json
+{
+  "pipeline": {"plugin": "sequential", "params": {}},
+  "methodology": {"plugin": "causal_selection", "params": {}},
+  "selector": {
+    "plugin": "floating_backward",
+    "params": {"min_features": 10, "max_evaluations": 200, "tolerance": 0.0}
+  },
+  "evaluator": {"plugin": "rl_model", "params": {}},
+  "seeds": [7, 19, 43]
+}
+```
 
-JSON configuration is available at several layers. The complete workflow is
-**not yet a single installable feature-selection plugin package**: phase-1
-workers use a JSON subprocess protocol, pairwise parameters use manifests,
-filter methods are an explicit built-in list, and warehouse schemas are typed.
-Adding a new estimator currently requires code and tests in its owner; changing
-a JSON name alone cannot install a new method. The guide lists each extension
-point and the remaining packaging work.
+This fragment is not a complete real run: add a pinned dataset, every stage and
+the RL runner configuration. There is no silent demo/model/data fallback.
 
-## Our trading example
+```bash
+feature-selector --load_config examples/plugin_demo.json \
+  --set selector.params.max_evaluations=12 \
+  --set selector.params.tolerance=0.0001 \
+  --output output/demo-budget12
+```
 
-Trading populations have separate targets and denominators. Do not restore an
-old EURUSD manifest or selection from an earlier release: its replacement must
-be generated from admitted, repaired inputs. Acquisition entry points are in
-[data sources and reproduction](docs/DATA_SOURCES.md). Data is acquired with
-your own provider access and stored outside Git. Re-downloading a revisable
-dataset can produce different bytes; reproducing an old number requires the
-matching vintage, preprocessing and input digests.
+`--set path=JSON` accepts typed numbers, booleans, lists, objects and strings.
+Input paths resolve relative to the JSON file; output resolves relative to the
+invocation directory. A different config, code or input requires a new output
+directory. Budget changes are new identities, not identical replays.
 
-Our business evaluation retrains before each validation week using the declared
-preceding training window. Static literature comparisons retain the original
-paper's protocol. Changing retraining frequency, target or market creates a
-different experiment that needs its own configuration and validation.
+## Complete causal_selection workflow
 
-## Results and storage
+| Stage | Work preserved |
+|---|---|
+| Data quality | Inventory, source verification, coverage, outliers, publication clocks |
+| Profiles | Stationarity, lags, temporal/spectral behavior, fold stability |
+| Causal | Assumptions, association, multiplicity, controls/placebos, counterfactual limits |
+| Relationships | Aliases, linear/nonlinear dependence, lags, redundancy groups |
+| Candidate generation | Existing filters, parent/component contrasts, interaction rescue |
+| Encoding | Per-column measured choices and TRAIN-only fitted transformations |
+| Extractor selection | Profile groups, measured contrasts, receptive fields, combined representation |
+| **Model wrapper** | Fresh fitting of the actual downstream model for every subset and seed |
+| Confirmation | Independent confirmation evidence and adaptive selection-bias assessment |
 
-Individual metrics, causal evidence, pairwise results and ranking records have
-versioned schemas in the existing warehouse. Local DuckDB and the warehouse
-HTTP adapter share the phase-2/3 storage implementation. A service URL requires
-your service deployment and token from its configured environment variable.
+No stage is optional in this methodology. `NOT_IDENTIFIED` remains unknown, not
+proof of causal absence. Production evidence must cover every declared subject.
+The artifact bridge verifies bindings and bytes; it is not a new scientific audit
+of an upstream estimator. See the [integration map](docs/INTEGRATION_MAP.md).
 
-Keep a physical analytical snapshot and a second verified copy. Commit the
-code, effective configs, manifests, checksums and regeneration instructions;
-keep large database files, private data and credentials outside Git. Backups
-must be made after writers close/checkpoint the database, not by copying a live
-file while it is being changed.
+### Groups, architecture and pruning
 
-## Run with your AI agent
+The manifest declares ordered columns, coherent encoding blocks, profile groups
+and representation. Deleting an input reduces its branch's channels; deleting the
+last removes the branch and its fusion connections. Reinclusion restores it.
+The evaluator receives remapped indices and must rebuild/retrain the actual model.
+Zero masking alone is not structural pruning.
 
-> Read this README, upstream.lock.json and docs/PORTABILITY.md. Run the pinned
-> synthetic example in a new directory. Verify both closures, the candidate
-> file, local warehouse readback and restart reuse. Report the exact outputs,
-> unsupported domain requirements and failed checks. For my own data, first
-> define targets, timestamps, availability, TRAIN boundaries and validation
-> schedule; use the source adapters and existing engines. Keep failures and
-> NOT_IDENTIFIED explicit. Use batch scripts and status commands rather than
-> continuous log polling. Do not call a ranking a final selection.
+Freeze profiles, extractor assignments, window/downsampling, reward, business
+rules and training budget during subset comparisons. Record parameter counts.
+Choose a different causal CNN/TCN architecture in a separate identified contrast,
+not silently during feature search. No rolling z-score, arbitrary clipping or
+agent-state feedback is allowed in this financial methodology.
 
-## Components
+### Selection and interpretation
 
-- [predictor](https://github.com/harveybc/predictor): campaign drivers, pairwise/ranking engines and weekly validation.
-- [causal-inference](https://github.com/harveybc/causal-inference): column profiling, causal studies and complete-population correction.
-- [feature-eng](https://github.com/harveybc/feature-eng): engineered inputs and target construction.
-- [feature-extractor](https://github.com/harveybc/feature-extractor): learned representations.
-- [preprocessor](https://github.com/harveybc/preprocessor): independent preprocessing and legacy feature-selector plugins.
-- [financial-data](https://github.com/harveybc/financial-data), [data-lake](https://github.com/harveybc/data-lake), [data-gov](https://github.com/harveybc/data-gov): source metadata, storage and governed access.
-- [data-warehouse](https://github.com/harveybc/data-warehouse): analytical integration; the pinned phase-2/3 DuckDB schema currently lives in predictor's `olap/store` package.
+The RL bridge supports declared native Sharpe or profit objectives. External
+evaluators can implement other frozen objectives. Retain TRAIN/selection scores,
+gap, drawdown, activity, long/short counts, win rates, early exits and costs.
+The baseline requires at least two orders/week on average per seed, as eligibility,
+not a bonus for forcing trades. An explicit maximum gap may also apply.
 
-## License
+Floating search is a bounded heuristic, not global optimization. Its tolerance
+can prefer a smaller near-best subset but is **not** a statistical noninferiority
+certificate. Repeated selection makes internal validation part of development.
+TEST is not used. A PPO result does not prove the same inputs are optimal for SAC
+or the expert-guided lane; each needs its own model-specific evaluation.
 
-The new documentation and adapter in this repository use the MIT license.
-External engines and datasets retain their own licenses and access conditions.
+## Install an external plugin
+
+```bash
+python -m pip install ./examples/external_plugin
+feature-selector --action plugins
+feature-selector --load_config examples/plugin_demo.json \
+  --set selector.plugin=external_fixed \
+  --set 'selector.params={"columns":["signal_a","signal_b"]}' \
+  --output output/external-demo
+```
+
+Replacing a plugin discards the old plugin's file parameters. Each plugin is an
+independently installed distribution with a `feature_selector.*` entry point.
+JSON selects installed code; it does not install code. Duplicate names are rejected.
+See [PLUGIN_API.md](docs/PLUGIN_API.md) and the separate example package.
+
+## Existing engines and limits
+
+- [Design/traceability](docs/PLUGIN_DESIGN.md), [verification](docs/PLUGIN_VERIFICATION.md).
+- [Legacy phase-2/3 example](docs/LEGACY_PHASE23.md): retained pairwise/mRMR/JMI and
+  DuckDB workflow. Its historical `upstream.lock.json` pins are not current market admission.
+- [Legacy portability guide](docs/PORTABILITY.md): original scientific interfaces.
+
+The package does not execute live trades, fix broker costs, delete campaigns or
+move implementations out of their owning repos. Hashes detect accidental changes;
+they are not signatures against a writer replacing a directory coherently.
+Use governed environment credentials in external runners, never secrets in JSON.
+
+MIT for this package; external engines and data retain their own licenses.

@@ -1,5 +1,10 @@
 # Reuse and extension audit
 
+Historical engine audit. The plugin registry described as future work below is
+now implemented in package 0.2; see [PLUGIN_API.md](PLUGIN_API.md). Scientific
+engine limitations and real-domain adapter requirements still apply. These old
+pins do not admit newer market datasets automatically.
+
 Audited on 2026-10-07 against [the pinned revisions](../upstream.lock.json).
 The example executes the existing algorithms on generated data. This document
 describes the additional contracts required for a real dataset.

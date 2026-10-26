@@ -1,0 +1,19 @@
+{
+  "pipeline": {"plugin": "sequential", "params": {}},
+  "methodology": {"plugin": "causal_selection", "params": {}},
+  "dataset": {"plugin": "synthetic", "params": {"seed": 41}},
+  "selector": {"plugin": "floating_backward", "params": {"min_features": 1, "max_evaluations": 64, "tolerance": 0.001}},
+  "evaluator": {"plugin": "synthetic_linear", "params": {"ridge": 0.1}},
+  "seeds": [7],
+  "output": "output/plugin-demo",
+  "stages": {
+    "data_quality": {"plugin": "synthetic", "params": {}},
+    "profiles": {"plugin": "synthetic", "params": {}},
+    "causal": {"plugin": "synthetic", "params": {}},
+    "relationships": {"plugin": "synthetic", "params": {}},
+    "candidate_generation": {"plugin": "synthetic", "params": {}},
+    "encoding": {"plugin": "synthetic", "params": {}},
+    "extractor_selection": {"plugin": "synthetic", "params": {}},
+    "confirmation": {"plugin": "synthetic", "params": {}}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema": "feature_selector.method_state.v1",
+  "date": "2026-10-25",
+  "current_stage": "S13_PACKAGE_ACCEPTED_PUBLICATION_PENDING",
+  "design": "docs/PLUGIN_DESIGN.md",
+  "requirements": ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10"],
+  "scope": "plugin package and full methodology orchestration, not a financial selection result",
+  "financial_training_started": false,
+  "verification": {"tests_passed": 34, "legacy_tests_skipped": 4, "clean_install": true, "external_plugin_cli": true, "demo_subset_evaluations": 18, "replay_bytes_and_mtimes_equal": true, "report": "docs/PLUGIN_VERIFICATION.md"},
+  "next_actions": ["publish verified package and documentation", "native corrected PPO evaluator integration and upstream evidence adapters", "actual-model scientific search remains separate"],
+  "history": [
+    {"stage": "S0_S8", "result": "existing engines, source ownership, interfaces, requirements and tests designed"},
+    {"stage": "S9", "result": "tests failed before package implementation; search budget exception corrected"},
+    {"stage": "S10_S12", "result": "34 package tests pass; native financial training not performed"},
+    {"stage": "S13", "result": "clean install, external distribution and CPU replay verified; fixed missing test build dependencies"}
+  ]
+}

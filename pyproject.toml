@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "feature-selector"
+version = "0.2.0"
+description = "Plugin-driven causal evidence and real-model floating feature selection"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+test = ["pytest>=7", "setuptools>=68", "wheel"]
+
+[project.scripts]
+feature-selector = "feature_selector.main:main"
+
+[project.entry-points."feature_selector.pipelines"]
+sequential = "feature_selector.pipeline:SequentialPipeline"
+
+[project.entry-points."feature_selector.methodologies"]
+causal_selection = "feature_selector.methodology:CausalSelection"
+
+[project.entry-points."feature_selector.selectors"]
+floating_backward = "feature_selector.search:FloatingBackward"
+fixed = "feature_selector.search:FixedSubset"
+
+[project.entry-points."feature_selector.evaluators"]
+rl_model = "feature_selector.evaluators:RLModelEvaluator"
+synthetic_linear = "feature_selector.demo:SyntheticEvaluator"
+
+[project.entry-points."feature_selector.datasets"]
+manifest = "feature_selector.stages:ManifestDataset"
+synthetic = "feature_selector.demo:SyntheticDataset"
+
+[project.entry-points."feature_selector.stages"]
+artifact = "feature_selector.stages:ArtifactStage"
+command = "feature_selector.stages:CommandStage"
+synthetic = "feature_selector.demo:SyntheticStage"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
