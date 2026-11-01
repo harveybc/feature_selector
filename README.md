@@ -14,6 +14,9 @@ Canonical repository: [harveybc/feature_selector](https://github.com/harveybc/fe
 - Predictor-style config precedence and saved effective configuration/code identities.
 - Sequential backward **floating** selection: deletion, conditional reinclusion,
   best subsets per size, deterministic tie handling and a finite evaluation budget.
+- `fixed_ablation`: predeclared channel/block/branch deletions before an adaptive
+  search. The [paired SAC pilot](docs/PAIRED_ABLATION_PILOT.md) compares two
+  checkpoint evaluators without claiming a final selected feature list.
 - Full `causal_selection` orchestration, retaining every scientific stage.
   Existing algorithms stay in their owning repos, connected by artifact/command
   adapters rather than duplicated or replaced.

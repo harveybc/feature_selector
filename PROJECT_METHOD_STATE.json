@@ -1,7 +1,9 @@
 {
   "schema": "feature_selector.method_state.v1",
-  "date": "2026-10-26",
-  "current_stage": "S15_COST_MODE_VERIFIED_NATIVE_RL_INTEGRATION_PENDING",
+  "date": "2026-11-01",
+  "current_stage": "PAIRED_NATIVE_SAC_ABLATION_VERIFICATION",
+  "paired_pilot": {"design":"docs/PAIRED_ABLATION_PILOT.md","selector":"fixed_ablation","native_owner":"agent-multi","final_selection":false,"accepted_by_owner":true},
+  "paired_pilot_package_verification": {"tests_passed":47,"legacy_skipped":4,"wheel_version":"0.2.2","demo_run_and_resume":true,"native_tests_passed":33,"native_cpu_smoke_updates":29,"native_full_accounts":2},
   "cost_extension": {"design": "docs/PLUGIN_DESIGN.md", "requirement": "P11", "tests_passed": 38, "legacy_skipped": 4, "zero_cost_use": "diagnostic_only", "native_financial_fit": false},
   "publication": {"repository": "harveybc/feature_selector", "branch": "main", "code_commit": "2fea401ed52b38fc4bcba20089d15b4386e375ce", "remote_identity_verified": true},
   "design": "docs/PLUGIN_DESIGN.md",
@@ -9,7 +11,7 @@
   "scope": "plugin package and full methodology orchestration, not a financial selection result",
   "financial_training_started": false,
   "verification": {"tests_passed": 34, "legacy_tests_skipped": 4, "clean_install": true, "external_plugin_cli": true, "demo_subset_evaluations": 18, "replay_bytes_and_mtimes_equal": true, "report": "docs/PLUGIN_VERIFICATION.md"},
-  "next_actions": ["native corrected PPO evaluator integration and upstream evidence adapters", "paired configured/zero-cost diagnostic before costly subset search; fresh policies and crossed evaluation", "actual-model scientific search remains separate"],
+  "next_actions": ["verify and execute paired native discrete-SAC sensitivity pilot", "compare TRAIN-best and validation-protected evaluator deltas before full floating search", "retain full upstream evidence adapter requirements; no stage-envelope fabrication"],
   "history": [
     {"stage": "S0_S8", "result": "existing engines, source ownership, interfaces, requirements and tests designed"},
     {"stage": "S9", "result": "tests failed before package implementation; search budget exception corrected"},

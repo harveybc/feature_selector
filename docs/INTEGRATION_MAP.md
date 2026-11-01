@@ -32,6 +32,14 @@ No missing scientific result may be filled with synthetic metadata.
 
 ## Real RL integration remaining
 
+Update 2026-11-01: the native lane now uses discrete SAC. The
+`fixed_ablation` diagnostic plugin is consumed by agent-multi's
+`tools/run_paired_ablation.py`: structural subsets, fresh replay, paired
+support and two checkpoint selectors. This bounded pilot does not complete
+the generic causal-selection bridge or supply missing upstream stage envelopes.
+See [paired pilot](PAIRED_ABLATION_PILOT.md). The PPO discussion below records
+the earlier integration state, not the algorithm used by this pilot.
+
 The package supplies the strict command evaluator and tests its protocol. The
 native PPO runner still needs its production bridge mapping the incoming subset
 to the actual recipe/branches/scaler, qualifying fresh training and exact reload,

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "feature-selector"
-version = "0.2.1"
+version = "0.2.2"
 description = "Plugin-driven causal evidence and real-model floating feature selection"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -26,6 +26,7 @@ causal_selection = "feature_selector.methodology:CausalSelection"
 [project.entry-points."feature_selector.selectors"]
 floating_backward = "feature_selector.search:FloatingBackward"
 fixed = "feature_selector.search:FixedSubset"
+fixed_ablation = "feature_selector.ablation:FixedAblation"
 
 [project.entry-points."feature_selector.evaluators"]
 rl_model = "feature_selector.evaluators:RLModelEvaluator"
