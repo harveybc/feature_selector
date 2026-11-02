@@ -30,6 +30,12 @@ the separate financial simulator audit or certify a newly selected market list.
 The real-model runner must implement the [RL contract](docs/PLUGIN_API.md#real-rl-evaluator)
 on the corrected simulator. No financial RL training is started by installation.
 
+**Approved next experiment:** [mask-first floating selection](docs/MASK_FIRST_FLOATING.md)
+after discrete-SAC hyperparameter optimization, followed by fresh structural
+fits for a few finalists. This protocol does not weaken `rl_model`'s fresh-fit
+contract and does not claim an installed native mask evaluator or a completed
+financial selection.
+
 ## Installation and first run
 
 Python 3.10+ on Linux; verified on Python 3.12. The small example requires no GPU,
