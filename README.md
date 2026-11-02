@@ -14,6 +14,9 @@ Canonical repository: [harveybc/feature_selector](https://github.com/harveybc/fe
 - Predictor-style config precedence and saved effective configuration/code identities.
 - Sequential backward **floating** selection: deletion, conditional reinclusion,
   best subsets per size, deterministic tie handling and a finite evaluation budget.
+- `two_pass_greedy`: one ordered deletion pass, accepting only improvements,
+  followed by one reinsertion pass over removed blocks. At most 1+2B evaluations
+  for B coding blocks; see [the exact protocol](docs/TWO_PASS_SELECTION.md).
 - `fixed_ablation`: predeclared channel/block/branch deletions before an adaptive
   search. The [paired SAC pilot](docs/PAIRED_ABLATION_PILOT.md) compares two
   checkpoint evaluators without claiming a final selected feature list.
@@ -30,11 +33,11 @@ the separate financial simulator audit or certify a newly selected market list.
 The real-model runner must implement the [RL contract](docs/PLUGIN_API.md#real-rl-evaluator)
 on the corrected simulator. No financial RL training is started by installation.
 
-**Approved next experiment:** [mask-first floating selection](docs/MASK_FIRST_FLOATING.md)
-after discrete-SAC hyperparameter optimization, followed by fresh structural
-fits for a few finalists. This protocol does not weaken `rl_model`'s fresh-fit
-contract and does not claim an installed native mask evaluator or a completed
-financial selection.
+**Current owner-approved experiment:** [two-pass masked selection](docs/TWO_PASS_SELECTION.md)
+on frozen paired discrete-SAC checkpoints, before DEAP, followed by fresh
+structural fits for finalists. The native adapter lives in agent-multi.
+This protocol does not weaken `rl_model`'s fresh-fit contract or claim a completed
+financial selection. The more expensive floating search was stopped on request.
 
 ## Installation and first run
 

@@ -99,3 +99,62 @@ class FixedSubset:
         return dict(selected=cols if result['eligible'] else None, termination='FIXED_CONTROL',
                     evaluations=1, results=[dict(features=cols, **result)], trace=[],
                     globally_optimal=False, scope='MODEL_SPECIFIC_DEVELOPMENT')
+
+
+class TwoPassGreedy:
+    """One ordered deletion pass, then one pass over accepted deletions only."""
+    api_version = 1
+    plugin_params = dict(min_features=1, tolerance=0.0)
+
+    def select(self, dataset, evaluate, params, progress=None):
+        validate_dataset(dataset)
+        params = {**self.plugin_params, **params}
+        minimum, tolerance = params['min_features'], params['tolerance']
+        require(type(minimum) is int and 1 <= minimum <= len(dataset['features']), 'MIN_FEATURES')
+        require(type(tolerance) in (int,float) and math.isfinite(tolerance) and tolerance >= 0, 'TOLERANCE')
+        blocks = dataset['blocks']; current = list(dataset['features'])
+        cache, trace, removed = {}, [], []
+        after_deletion = None
+
+        def run(columns):
+            key = tuple(columns)
+            if key not in cache:
+                cache[key] = validate_score(evaluate(columns))
+            return cache[key]
+
+        def snapshot(stage, termination=None):
+            r = dict(selected=list(current), counts=dict(initial=len(dataset['features']),
+                after_deletion=after_deletion, final=len(current) if termination else None),
+                stage=stage, termination=termination, evaluations=len(cache), trace=list(trace),
+                evaluation_bound=1+2*len(blocks), globally_optimal=False,
+                scope='ORDERED_TWO_PASS_MODEL_SPECIFIC_DEVELOPMENT')
+            if progress: progress(r)
+            return r
+
+        baseline = run(current)
+        if not baseline['eligible']:
+            r = snapshot('STOPPED', 'NO_ELIGIBLE_BASELINE'); r['selected'] = None
+            return r
+        for phase, items in ((1, blocks), (2, removed)):
+            for block in items:
+                before = list(current)
+                wanted = set(current).difference(block) if phase == 1 else set(current).union(block)
+                candidate = [c for c in dataset['features'] if c in wanted]
+                if len(candidate) < minimum:
+                    continue
+                old, new = run(current), run(candidate)
+                accepted = new['eligible'] and new['score'] > old['score'] + tolerance
+                if accepted:
+                    current = candidate
+                    if phase == 1: removed.append(block)
+                trace.append(dict(pass_number=phase, **{'pass':phase}, block=list(block),
+                    before=before, candidate=candidate, after=list(current), accepted=bool(accepted),
+                    before_score=old['score'], candidate_score=new['score'],
+                    candidate_eligible=new['eligible']))
+                snapshot('DELETE' if phase == 1 else 'REINSERT')
+            if phase == 1:
+                after_deletion = len(current)
+                snapshot('DELETION_COMPLETE')
+        r = snapshot('COMPLETE', 'TWO_PASSES_COMPLETE')
+        r['results'] = [dict(features=list(k), **v) for k,v in cache.items()]
+        return r

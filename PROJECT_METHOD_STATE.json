@@ -1,7 +1,8 @@
 {
   "schema": "feature_selector.method_state.v1",
   "date": "2026-11-01",
-  "current_stage": "FROZEN_MASK_NATIVE_SEARCH_RUNNING",
+  "current_stage": "ORDERED_TWO_PASS_VERIFIED_FOR_NATIVE_LAUNCH",
+  "two_pass": {"plan":"docs/TWO_PASS_SELECTION.md","selector":"two_pass_greedy","owner_clarified":"2026-11-02","package_tests_passed":51,"legacy_skipped":4,"native_tests_passed":32,"maximum_requests_for_111_blocks":223,"original_floating_service":"stopped and disabled"},
   "mask_execution": {"native_code":"5b65c8d1","identity":"13961f7797bff4c1f960f7df8ecbb0136ddb54453806111a569e6bab07773e5f","native_tests_passed":31,"real_preflight_passed":true,"features":120,"groups":31,"atomic_blocks":111,"native_report":"agent-multi/docs/work_plan/191_MASK_FIRST_EXECUTION.md","final_selection":false},
   "mask_first": {"plan":"docs/MASK_FIRST_FLOATING.md","owner_reordered":"2026-11-02","deap_after_selection":true,"selector":"floating_backward","native_owner":"agent-multi","fresh_training_per_mask":false,"structural_finalists_required":true},
   "paired_pilot_runtime": {"native_code":"45ea82dd","selector_code":"00ec628","identity":"815ddbeed8242eb24e234c154f9e9dee658874b0a751163b31120be7632d0757","started_utc":"2026-11-01T10:39:40Z","fresh_fits":6,"reused_control_prefixes":2,"automatic_collection":true,"final_selection":false},
