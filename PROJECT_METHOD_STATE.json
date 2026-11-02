@@ -1,7 +1,8 @@
 {
   "schema": "feature_selector.method_state.v1",
   "date": "2026-11-01",
-  "current_stage": "PAIRED_NATIVE_SAC_ABLATION_RUNNING",
+  "current_stage": "FROZEN_MASK_NATIVE_ADAPTER_PREFLIGHT",
+  "mask_first": {"plan":"docs/MASK_FIRST_FLOATING.md","owner_reordered":"2026-11-02","deap_after_selection":true,"selector":"floating_backward","native_owner":"agent-multi","fresh_training_per_mask":false,"structural_finalists_required":true},
   "paired_pilot_runtime": {"native_code":"45ea82dd","selector_code":"00ec628","identity":"815ddbeed8242eb24e234c154f9e9dee658874b0a751163b31120be7632d0757","started_utc":"2026-11-01T10:39:40Z","fresh_fits":6,"reused_control_prefixes":2,"automatic_collection":true,"final_selection":false},
   "paired_pilot": {"design":"docs/PAIRED_ABLATION_PILOT.md","selector":"fixed_ablation","native_owner":"agent-multi","final_selection":false,"accepted_by_owner":true},
   "paired_pilot_package_verification": {"tests_passed":47,"legacy_skipped":4,"wheel_version":"0.2.2","demo_run_and_resume":true,"native_tests_passed":33,"native_cpu_smoke_updates":29,"native_full_accounts":2},

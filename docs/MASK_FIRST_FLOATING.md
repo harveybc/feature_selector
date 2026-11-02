@@ -1,7 +1,8 @@
 # Mask-first floating selection protocol
 
-Accepted 2026-11-02 for the discrete SAC lane. Optimize the already selected
-SAC first, then freeze its hyperparameters before feature subset comparisons.
+Reordered by the owner on 2026-11-02 for the discrete SAC lane: use the existing
+paired full-input baseline, freeze it, then perform masked subset comparisons.
+DEAP moves after selection; no new fit or early stopping runs for each mask.
 
 The existing `floating_backward` selector can call a frozen-model evaluator:
 remove whole coding blocks, evaluate, and conditionally reinclude blocks.
@@ -31,6 +32,7 @@ must bind the full input layout and frozen checkpoint. The mask evaluator and
 its native replay tests must be completed before this financial search launches.
 This approved protocol is not a completed selection or an installed evaluator.
 
-agent-multi work-plan 190 defines the native acceptance tests and an automatic
-closure-to-briefing helper. A successful DEAP close produces the checkpoint and
-configuration handoff; it does not automatically start floating selection.
+agent-multi work-plan 190 defines the native acceptance tests, fixed paired
+checkpoint rule and full-period evaluation. Its historical DEAP closure helper
+is no longer a prerequisite. The native adapter owns simulation and frozen
+receipts; this package owns the unchanged floating backward search algorithm.
