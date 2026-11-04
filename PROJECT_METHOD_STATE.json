@@ -1,7 +1,8 @@
 {
   "schema": "feature_selector.method_state.v1",
   "date": "2026-11-01",
-  "current_stage": "SECOND_STRUCTURAL_MASK_PASS_RUNNING",
+  "current_stage": "SECOND_MASK_COMPLETE_STRUCTURAL94_REFIT_RUNNING",
+  "second_mask_completion": {"counts":[108,93,94],"groups":30,"evaluations":113,"finished_utc":"2026-11-04T06:17:33Z","result_sha256":"ee172eb0f2f5e692196129cd457889579840dca211f6067d81d495f2dce3e065","structural_confirmation":"running in agent-multi plan196; fresh seed7","native_refit_identity":"410d64cc36705f5dbe7fb99c896fb88629dab9585aa0b7e6f7f1e16149717a0e","final_selection":false},
   "second_mask_runtime": {"native_code":"bbe89daf","identity":"b634709de2ff709847e7939ce79955dbe68e79a154c5b5f26cf8a7684876a61b","initial_features":108,"initial_groups":31,"atomic_blocks":100,"maximum_requests":201,"preflight_exact":true,"native_tests_passed":31,"final_selection":false},
   "exact_tie_extension": {"date":"2026-11-04","version":"0.2.4","remove_on_tie":"optional boolean, default false","reinsertion":"strict improvement","tiny_regression":"rejected","tests_passed":54,"legacy_skipped":4,"native_adapter":"agent-multi/tools/run_refit_mask_pass.py"},
   "two_pass_runtime": {"native_code":"b3a421f3","identity":"17af7faa1555c4bea89b6b90757623d114fb5aaefe34424d1cf1590906464627","started_utc":"2026-11-02T21:38:03Z","preflight_passed":true,"packaged_cli_demo_and_resume_exact":true,"initial_features":120,"maximum_requests":223,"final_selection":false},
