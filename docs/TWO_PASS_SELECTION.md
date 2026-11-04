@@ -26,3 +26,11 @@ snapshots after each decision; valid/invalid baseline handling.
 The native adapter reports phase-1 input/output lineage separately from phase-2
 initial, after-deletion and final counts. A store inventory count must never be
 misrepresented as the number of columns actually scored by phase 1.
+# Exact-tie removal option (2026-11-04)
+
+`remove_on_tie: true` permits deletion on an exactly equal eligible score.
+Reinsertion still requires a strict improvement greater than `tolerance`.
+Even a tiny regression is rejected; this option is not a non-inferiority margin.
+The default is false, preserving prior searches. Native round two uses zero
+tolerance, frozen structural108 weights, full TRAIN/VALIDATION and fixed support.
+

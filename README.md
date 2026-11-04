@@ -14,7 +14,8 @@ Canonical repository: [harveybc/feature_selector](https://github.com/harveybc/fe
 - Predictor-style config precedence and saved effective configuration/code identities.
 - Sequential backward **floating** selection: deletion, conditional reinclusion,
   best subsets per size, deterministic tie handling and a finite evaluation budget.
-- `two_pass_greedy`: one ordered deletion pass, accepting only improvements,
+- `two_pass_greedy`: one ordered deletion pass, accepting improvements (and exact
+  ties when explicitly configured with `remove_on_tie: true`),
   followed by one reinsertion pass over removed blocks. At most 1+2B evaluations
   for B coding blocks; see [the exact protocol](docs/TWO_PASS_SELECTION.md).
 - `fixed_ablation`: predeclared channel/block/branch deletions before an adaptive

@@ -104,12 +104,13 @@ class FixedSubset:
 class TwoPassGreedy:
     """One ordered deletion pass, then one pass over accepted deletions only."""
     api_version = 1
-    plugin_params = dict(min_features=1, tolerance=0.0)
+    plugin_params = dict(min_features=1, tolerance=0.0, remove_on_tie=False)
 
     def select(self, dataset, evaluate, params, progress=None):
         validate_dataset(dataset)
         params = {**self.plugin_params, **params}
         minimum, tolerance = params['min_features'], params['tolerance']
+        require(type(params['remove_on_tie']) is bool, 'REMOVE_ON_TIE')
         require(type(minimum) is int and 1 <= minimum <= len(dataset['features']), 'MIN_FEATURES')
         require(type(tolerance) in (int,float) and math.isfinite(tolerance) and tolerance >= 0, 'TOLERANCE')
         blocks = dataset['blocks']; current = list(dataset['features'])
@@ -144,6 +145,8 @@ class TwoPassGreedy:
                     continue
                 old, new = run(current), run(candidate)
                 accepted = new['eligible'] and new['score'] > old['score'] + tolerance
+                if phase == 1 and params['remove_on_tie'] and new['eligible']:
+                    accepted = accepted or new['score'] == old['score']
                 if accepted:
                     current = candidate
                     if phase == 1: removed.append(block)

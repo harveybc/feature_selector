@@ -1,7 +1,8 @@
 {
   "schema": "feature_selector.method_state.v1",
   "date": "2026-11-01",
-  "current_stage": "ORDERED_TWO_PASS_NATIVE_RUNNING",
+  "current_stage": "SECOND_STRUCTURAL_MASK_PASS_INTEGRATION",
+  "exact_tie_extension": {"date":"2026-11-04","version":"0.2.4","remove_on_tie":"optional boolean, default false","reinsertion":"strict improvement","tiny_regression":"rejected","tests_passed":54,"legacy_skipped":4,"native_adapter":"agent-multi/tools/run_refit_mask_pass.py"},
   "two_pass_runtime": {"native_code":"b3a421f3","identity":"17af7faa1555c4bea89b6b90757623d114fb5aaefe34424d1cf1590906464627","started_utc":"2026-11-02T21:38:03Z","preflight_passed":true,"packaged_cli_demo_and_resume_exact":true,"initial_features":120,"maximum_requests":223,"final_selection":false},
   "two_pass": {"plan":"docs/TWO_PASS_SELECTION.md","selector":"two_pass_greedy","owner_clarified":"2026-11-02","package_tests_passed":51,"legacy_skipped":4,"native_tests_passed":32,"maximum_requests_for_111_blocks":223,"original_floating_service":"stopped and disabled"},
   "mask_execution": {"native_code":"5b65c8d1","identity":"13961f7797bff4c1f960f7df8ecbb0136ddb54453806111a569e6bab07773e5f","native_tests_passed":31,"real_preflight_passed":true,"features":120,"groups":31,"atomic_blocks":111,"native_report":"agent-multi/docs/work_plan/191_MASK_FIRST_EXECUTION.md","final_selection":false},

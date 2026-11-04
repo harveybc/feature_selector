@@ -1,4 +1,5 @@
 import copy
+import pytest
 from feature_selector.search import TwoPassGreedy
 from test_plugin_contract import dataset
 
@@ -49,3 +50,27 @@ def test_ineligible_candidate_cannot_win_and_invalid_baseline_stops():
     r=TwoPassGreedy().select(d,lambda c:dict(score=None,gap=None,eligible=False),{})
     assert r['selected'] is None and r['termination']=='NO_ELIGIBLE_BASELINE'
     assert r['evaluations']==1
+
+
+def test_remove_exact_ties_but_never_reinsert_ties():
+    r = TwoPassGreedy().select(dataset(),
+        lambda c: dict(score=-1., gap=0., eligible=True),
+        dict(remove_on_tie=True, tolerance=0.))
+    assert r['selected'] == ['c']
+    assert r['counts'] == dict(initial=3, after_deletion=1, final=1)
+    assert [t['accepted'] for t in r['trace']] == [True, True, False, False]
+    assert [t['pass'] for t in r['trace']] == [1, 1, 2, 2]
+
+
+def test_remove_on_tie_does_not_allow_tiny_regression_or_ineligibility():
+    for eligible in (True, False):
+        r = TwoPassGreedy().select(dataset(),
+            lambda c: dict(score=1. if len(c)==3 else 1.-1e-12,
+                           gap=0., eligible=True if len(c)==3 else eligible),
+            dict(remove_on_tie=True, tolerance=.01))
+        assert r['selected'] == list('abc')
+
+
+def test_remove_on_tie_requires_boolean():
+    with pytest.raises(ValueError, match='REMOVE_ON_TIE'):
+        TwoPassGreedy().select(dataset(), lambda c: None, dict(remove_on_tie='true'))
